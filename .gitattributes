@@ -1,0 +1,4 @@
+*.BAS text eol=crlf
+*.SC5 binary
+*.DAT binary
+*.DSK binary
