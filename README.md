@@ -1,30 +1,23 @@
-# IRONCLAD
-
-*Naval combat for the MSX2.*
+# IRONCLAD - Naval combat for the MSX2
 
 **[Download the game](https://github.com/mbelgin/ironclad/releases/latest)**
 &nbsp;&middot;&nbsp;
 **[the manual (PDF)](https://github.com/mbelgin/ironclad/raw/main/release/IRONCLAD_MANUAL.PDF)**
 
-The release carries `IRONCLAD.DSK` and the printed manual, a twelve-panel
-booklet that prints on two Letter sheets and folds in three.
-
 > **This game is in active development.** It will keep improving and changing,
-> so expect rules, screens and balance to move between releases. Found a bug,
-> or want something added? Please open an issue at
+> so expect the rulesets, the screens and the CPU algorithms to change
+> between releases. Found a bug, or want something added? Please open an
+> issue at
 > [github.com/mbelgin/ironclad/issues](https://github.com/mbelgin/ironclad/issues).
 > Bug reports and feature requests are both welcome.
 
 Ten by ten squares of open sea, an enemy fleet matching your own hidden
 somewhere on it, and no way to look across. Every shot you fire is a discovery,
 and the distance between victory and defeat is what you make of them. Seven
-rule sets, from a gentle kids' mode to salvo duels of pure deduction, with
+rulesets, from a gentle kids' ruleset to salvo duels of pure deduction, with
 best-of-N match play.
 
 ![Main menu](img/menu.png)
-
-*The main menu. RULES chooses how you play, MATCH chooses a single game or a
-series.*
 
 ---
 
@@ -41,16 +34,13 @@ Your menu choices are saved and restored next time you play.
 
 ## The menu
 
-Two rows. **RULES** picks one of the seven ways to play; **MATCH** picks a
+Two rows. **RULESET** picks one of the seven ways to play; **MATCH** picks a
 single game or a best-of-3, 5 or 7 series. Move between rows with ↑ ↓, change
 a value with ← →, and press **SPACE** to start. **Q** twice exits to BASIC.
 
-Press **?** at the menu for the rules of every mode side by side:
+Press **?** at the menu for the rules of every ruleset side by side:
 
 ![The rules table](img/rules.png)
-
-*Every mode compared at once: shots per turn, what the report tells you (C, M
-and S are explained in the legend) and whether ships may touch.*
 
 ## Placing your fleet
 
@@ -60,12 +50,9 @@ where it doesn't.
 
 ![Placing the carrier](img/placement.png)
 
-*Placing the Carrier. The message line names the ship being placed and the
-keys available while placing.*
-
 Move it with the arrows, **R** **R**otates it, **SPACE** drops it, **U**
-**U**ndoes the last deployed ship, and **Z** auto-places the rest. In every rule
-set except STEALTH, ships may not touch, not even diagonally, so each ship
+**U**ndoes the last deployed ship, and **Z** auto-places the rest. In every
+ruleset except STEALTH, ships may not touch, not even diagonally, so each ship
 needs a one-square ring of clear water. The same restriction binds the enemy.
 
 When the last ship is down, a coin toss decides who fires first (in a match it
@@ -79,86 +66,29 @@ results are reported on the message line. **TAB** flips between the two views
 at any time, though you can only fire from ENEMY WATERS. The first side to hit
 every square of every enemy ship wins.
 
-What a shot tells you depends on the mode. In the single-shot modes each shot
-is answered at once with hit, miss or sunk; in the salvo modes you fire a whole
-salvo and are then told only how many hits landed on each ship, never which
-shots landed them. [The rule sets](#the-rule-sets) covers both.
+What a shot tells you depends on the ruleset. In the single-shot rulesets each
+shot is answered at once with hit, miss or sunk; in the salvo rulesets you fire
+a whole salvo and are then told only how many hits landed on each ship, never
+which shots landed them. [The rulesets](#the-rulesets) covers both.
 
 The right-hand panels are the scoreboard, ENEMY above and YOURS below, one
 entry per ship. **AT:** shows the coordinate under the cursor, and in a match
 the score sits at the top (`GAME 2/3 1-0`).
 
-**Buoys are your notepad.** Press **X** on a square of ENEMY WATERS to mark it.
-An empty square cycles yellow buoy, gray buoy, clear; a square you have already
-fired at cycles its number red and back. Marks never affect play, and you can
-still fire at a marked square. The enemy keeps a notepad of its own: buoys that
-appear on YOUR FLEET are squares it has *deduced* must be empty.
+**Buoys are your notepad.** Press **X** on a square of ENEMY WATERS to mark it:
+an empty square cycles yellow buoy, gray buoy, clear, and a square you have
+already fired at cycles its number red and back. Marks never affect play, and
+you can still fire at a marked square. They earn their keep in the salvo
+rulesets, where the board is the only place to keep your working. The enemy
+keeps a notepad of its own: the buoys on YOUR FLEET are squares it has
+*deduced* must be empty.
 
-Press **?** during a game to put the full key list on screen; any key returns
-you to the board. **Q** twice abandons the game and returns to the menu.
+**?** puts the key list on screen at any point and any key dismisses it. **Q**
+twice abandons the game and returns to the menu.
 
-## Controls
+## The rulesets
 
-### On a keyboard
-
-| Key | Menu | Placement | Battle |
-|-----|------|-----------|--------|
-| ↑ ↓ ← → | choose row / change value | move ship | move cursor |
-| **SPACE** / RETURN | start | drop ship | fire / continue |
-| **R** | | rotate ship | |
-| **U** | | pick up last ship | take back last shot of the salvo |
-| **Z** | | auto-place the rest | |
-| **X** | | | buoy on empty water: gray → yellow → off; on a fired square: number red → back |
-| **TAB** | | switch view | switch view |
-| **?** | rules of every mode | key list | key list |
-| **Q** | exit to BASIC (twice) | back to menu | terminate game (twice) |
-
-Letters work in either case. Press **?** at any point in a game and the same
-list appears on screen:
-
-![The in-game key list](img/keys.png)
-
-*The key list, on call at any time with ?. Any key returns you to the board.*
-
-### On a handheld
-
-IRONCLAD plays well on an emulator handheld, but it needs a keyboard's worth of
-keys, so the buttons have to be mapped before the first game. These steps are
-for **blueMSX**, the MSX core in RetroArch:
-
-1. Start the game.
-2. Press the **Function** key (the diagram below shows where it hides).
-3. From the menu, choose **Controls**.
-4. Choose a controls port, for example **Port 1 Controls**.
-5. **Important:** set Device Type to **RetroKeyboard**. Without this the
-   mapping below has nothing to map to.
-6. Optional: set Analog to Digital Type to **Left Analog**.
-
-![Handheld button map](img/handheld.png)
-
-*Where the buttons live on a typical handheld. Function, Select and Start are
-the small ones in the middle; L and R sit on the back.*
-
-Recommended bindings, tested on blueMSX only:
-
-| Button | Key | Function |
-|---|---|---|
-| D-pad | ↑ ↓ ← → | move the cursor or the ship |
-| **Y** (left) | SPACE | fire, and drop a ship while deploying |
-| **A** (right) | U | undo: take back a shot or pick a ship back up |
-| **B** (bottom) | R | rotate the ship being placed |
-| **X** (top) | X | buoys, and the red marks on fired squares |
-| **L1** | TAB | switch between the two boards |
-| **R1** | Z | auto-place the rest of the fleet |
-| **Select** | ? | the key list, and the rules table in the menu |
-| **Start** | Q | back to the menu, or quit the game (press twice) |
-
-When the mapping suits you, save it with **Save Game Remap File** in the
-Controls menu, so a firmware update cannot take it away.
-
-## The rule sets
-
-| Rule set | Shots per turn | Fleet | You are told | Ships touch |
+| Ruleset | Shots per turn | Fleet | You are told | Ships touch |
 |---|---|---|---|:---:|
 | **SALVO** | 3, fired as a salvo | standard | hits per ship per salvo, sinkings named | no |
 | **SALVO PLUS** | 3, fired as a salvo | extended | hits per ship per salvo, sinkings named | no |
@@ -176,16 +106,7 @@ then Destroyer (DES, 2) twice more and four single-square Boats (BOT, 1).
 Cutter (CUT, 3), Launch (LAU, 2), Skiff (SKI, 2). **Big, five ships** (ANKA):
 Carrier (CAR, 5) twice, Battleship (BAT, 4) twice, Cruiser (CRU, 3).
 
-**The computer never cheats.** There is no difficulty setting either: in every
-mode it plays the strongest game it knows, it sees no more of your fleet than
-you see of its own, and it is told exactly what that mode's rules allow and
-never a square more. Every deduction it makes is one you could have made from
-the same reports. What makes it dangerous is bookkeeping: in the salvo modes
-it keeps a list of every position each of your ships could still be in, crosses
-off the ones your reports have ruled out, and picks its next target with
-algorithms as sophisticated as an MSX2 allows.
-
-### The salvo modes: SALVO, SALVO PLUS, BARRAGE
+### The salvo rulesets: SALVO, SALVO PLUS, BARRAGE
 
 Both sides fire a complete salvo before any results are given, and the report
 names only **how many hits landed on each ship, never which squares**.
@@ -199,36 +120,35 @@ is named but never shown:
   it hit is open water;
 - a **yellow** number *(automatic)* means that salvo scored at least one hit,
   somewhere among its squares. Which of them, you have to work out;
-- a **red** number *(yours, optional)* is one you marked yourself with **X**. Use it for a square
-  you have *proved* holds a ship, so a hit you have pinned down stops looking
-  like an open question.
+- a **red** number *(yours, optional)* is one you marked yourself with **X**.
+  Use it for a square you have *proved* holds a ship, so a hit you have pinned
+  down stops looking like an open question.
 
 Buoys carry the other half of the reasoning. Use of buoys is completely
 optional, and the game attaches no meaning to either color: they are your
 notepad. One recommended use:
 
-- a **yellow buoy** for the ring around a ship you have found. Ships may not
-  touch, so the moment a ship's squares are known, every square surrounding it
-  must be empty;
+- a **yellow buoy** for the ring around a ship you have found. No ship may
+  touch another in these three rulesets, so the moment a ship's squares are
+  known, every square surrounding it must be empty;
 - a **gray buoy** for water you have ruled out: every ship still afloat is too
   long for the gap, so there is no point ever firing there.
 
-Marked up this way the board shows your working at a glance: red squares are
-the ships you have found, yellow buoys are the water those ships rule out, gray
-buoys are the water your arithmetic rules out, and whatever is left unmarked is
-where the rest of the enemy fleet has to be.
+Marked up this way the board carries your whole deduction, and whatever is left
+unmarked is where the rest of the enemy fleet has to be.
 
 ![A salvo game on ENEMY WATERS](img/salvo.png)
 
-*A game in hand. Salvo C has just sunk the Cruiser. The player has marked
-confirmed hits in red, outlined the hulls they imply with yellow buoys, and
-grayed out the water no surviving ship could still occupy; the unmarked squares
-are what remains to search.*
+*The red numbers are the player's own marks, on squares proved to hold a ship,
+and the yellow buoys ring those hulls, which under SALVO rules must be clear
+water. What is left unmarked is what remains to search.*
 
-The ENEMY panel records, for each ship, the number of
-every salvo that hit it: `CAR 1 3 ▪ ▪ ▪` says salvos 1 and 3 each struck the
-Carrier and three squares are still afloat. The YOURS panel mirrors it for the
-enemy's salvos against you.
+The ENEMY panel records, for each ship, the number of every salvo that hit it.
+Above, `SUB A ▪ ▪` says salvo A struck the Submarine once and two of its squares
+are still whole, while `CAR 6 7 7 8 B` is a Carrier hit on five separate salvos
+and now sunk, which is why its name has turned red. A number appearing twice,
+like the two 7s there, is a single salvo putting two shells into the same hull.
+The YOURS panel mirrors all of it for the enemy's salvos against you.
 
 While building a salvo, **U** takes back its last shot; once the final shot
 fires the salvo resolves for good. After the enemy replies the game waits for
@@ -243,8 +163,9 @@ surviving ship could occupy. The message line says what it is doing:
 
 ![YOUR FLEET under salvo fire](img/salvo_your_fleet.png)
 
-*The same battle from the other side. Every enemy shot carries its salvo
-number, and the buoys are the enemy's own deductions: water it has proved
+*The same moment from the other side. The numbers on a wreck are the salvos
+that hit it, so the Carrier at F1 reading `7 6 8 3 5` is its panel row said
+twice. The buoys here are the enemy's working, not yours: water it has proved
 empty.*
 
 **SALVO PLUS** sends the same three shells against a larger fleet of eleven
@@ -257,10 +178,10 @@ your firepower shrinks as your fleet does, and so does the enemy's.
 
 ![SALVO PLUS](img/salvoplus.png)
 
-*SALVO PLUS adds more ships, including four Boats one square long, listed as
-BOT on both panels.*
+*`BOT 7 6 ▪ ▪`: two of your Boats gone, one hit each, on salvos 7 and 6. A
+Boat's row can never hold more than one number.*
 
-### The single-shot modes: CLASSIC, PURSUIT
+### The single-shot rulesets: CLASSIC, PURSUIT
 
 One aimed shot per turn, answered immediately with hit, miss or sunk. A miss
 shows as a splash, a hit as fire, and when a ship goes down it is revealed and
@@ -282,11 +203,77 @@ hit earns the young side another shot (the computer gets no such favor), and
 the enemy fires at random until it hits something, then works outward from the
 hit. Meant to be beaten, though it does not miss on purpose.
 
+## The opponent
+
+**The computer never cheats.** In every ruleset it plays the strongest game it
+knows, it sees no more of your fleet than you see of its own, and it is told
+exactly what that ruleset's rules allow and never a square more. Every deduction
+it makes is one you could have made from the same reports. What makes it
+dangerous is bookkeeping: in the salvo rulesets it keeps a list of every
+position each of your ships could still be in, crosses off the ones your reports
+have ruled out, and picks its next target with algorithms as sophisticated as an
+MSX2 allows.
+
+## Controls
+
+### On a keyboard
+
+| Key | Menu | Placement | Battle |
+|-----|------|-----------|--------|
+| ↑ ↓ ← → | choose row / change value | move ship | move cursor |
+| **SPACE** / RETURN | start | drop ship | fire / continue |
+| **R** | | rotate ship | |
+| **U** | | pick up last ship | take back last shot of the salvo |
+| **Z** | | auto-place the rest | |
+| **X** | | | buoy on empty water: yellow → gray → off; on a fired square: number red → back |
+| **TAB** | | switch view | switch view |
+| **?** | rules of every ruleset | key list | key list |
+| **Q** | exit to BASIC (twice) | back to menu | terminate game (twice) |
+
+Letters work in either case. Press **?** at any point in a game and the same
+list appears on screen:
+
+![The in-game key list](img/keys.png)
+
+### On a handheld
+
+IRONCLAD plays well on an emulator handheld, but it needs a keyboard's worth of
+keys, so the buttons have to be mapped before the first game. These steps are
+for **blueMSX**, the MSX core in RetroArch:
+
+1. Start the game.
+2. Press the **Function** key (the diagram below shows where it hides).
+3. From the menu, choose **Controls**.
+4. Choose a controls port, for example **Port 1 Controls**.
+5. **Important:** set Device Type to **RetroKeyboard**. Without this the
+   mapping below has nothing to map to.
+6. Optional: set Analog to Digital Type to **Left Analog**.
+
+![Handheld button map](img/handheld.png)
+
+*L and R sit on the back, out of view.*
+
+Recommended bindings, tested on blueMSX only:
+
+| Button | Key | Function |
+|---|---|---|
+| D-pad | ↑ ↓ ← → | move the cursor or the ship |
+| **Y** (left) | SPACE | fire, and drop a ship while deploying |
+| **A** (right) | U | undo: take back a shot or pick a ship back up |
+| **B** (bottom) | R | rotate the ship being placed |
+| **X** (top) | X | buoys, and the red marks on fired squares |
+| **L1** | TAB | switch between the two boards |
+| **R1** | Z | auto-place the rest of the fleet |
+| **Select** | ? | the key list, and the rules table in the menu |
+| **Start** | Q | back to the menu, or quit the game (press twice) |
+
+When the mapping suits you, save it with **Save Game Remap File** in the
+Controls menu, so a firmware update cannot take it away.
+
 ## End of game
 
 **Match play.** MATCH offers a single game, or a series: best of 3, 5 or 7. A
-coin toss decides who opens the first game, and the opening shot alternates
-from there. A series ends the moment one side takes the majority.
+series ends the moment one side takes the majority.
 
 When the last ship goes down, the enemy's fleet is revealed and **TAB** looks
 over both boards. In a series, **SPACE** starts the next game.
@@ -298,21 +285,14 @@ the menu.
 
 ![Victory](img/victory.png)
 
-*Victory. TAB from here returns to the boards for a post-game analysis, SPACE
-moves on.*
-
 ![Defeat](img/endgame.png)
-
-*Defeat, when the enemy gets there first.*
 
 
 ---
 
 IRONCLAD is free and always will be. If it made you happy, you can
 [buy me a coffee](https://ko-fi.com/mbelgin): that's the QR code on the loading
-screen. Source and disk images live at
-[github.com/mbelgin/ironclad](https://github.com/mbelgin/ironclad), and there is
-a printable booklet in `release/IRONCLAD_MANUAL.PDF`.
+screen.
 
 <sub>IRONCLAD and its rulesets take after the pen and paper naval battle games
 played on squared paper for generations. Any resemblance to trademarked products

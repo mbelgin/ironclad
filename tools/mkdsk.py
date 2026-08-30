@@ -43,7 +43,15 @@ def build(out, basdir=None, files=None, autoexec=None):
             fat[o] = v & 0xFF; fat[o + 1] = (fat[o + 1] & 0xF0) | ((v >> 8) & 0x0F)
         else:
             fat[o] = (fat[o] & 0x0F) | ((v << 4) & 0xF0); fat[o + 1] = (v >> 4) & 0xFF
-    boot = autoexec if autoexec is not None else b'10 COLOR 15,1,1:SCREEN 0:WIDTH 40:KEY OFF:LOCATE 8,11:PRINT"IRONCLAD IS LOADING ...":LOCATE 4,13:PRINT"PLEASE WAIT, THIS TAKES A WHILE":RUN"SETUP.BAS"\r\n\x1a'
+    if autoexec is not None:
+        boot = autoexec
+    else:
+        # the same version the loading panel shows, from the one VERSION file
+        with open(os.path.join(ROOT, 'VERSION'), encoding='ascii') as vf:
+            title = 'IRONCLAD V' + vf.read().strip() + ' IS LOADING ...'
+        boot = ('10 COLOR 15,1,1:SCREEN 0:WIDTH 40:KEY OFF:LOCATE %d,11:PRINT"%s"'
+                ':LOCATE 4,13:PRINT"PLEASE WAIT, THIS TAKES A WHILE":RUN"SETUP.BAS"\r\n\x1a'
+                % ((40 - len(title)) // 2, title)).encode('ascii')
     entries = [('AUTOEXEC.BAS', boot)]
     for f in (FILES if files is None else files):
         src = os.path.join(basdir, f) if basdir and os.path.exists(os.path.join(basdir, f)) else os.path.join(ROOT, f)

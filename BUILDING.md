@@ -23,6 +23,12 @@ build emits one program per rule family, each without the other's enemy code:
 `SETUP.BAS` is the menu and is edited directly. The salvo opponent's search is
 Z80 machine code in `src/z80/fold.asm`.
 
+The version shown on the loading screen comes from the `VERSION` file at the
+repo root, and nowhere else. `SETUP.BAS` carries a `@V@` placeholder that
+`tools/stamp.py` substitutes on the way into `build/`; the boot message in
+`tools/mkdsk.py` reads the same file. Copying `SETUP.BAS` by hand instead of
+running the stamp leaves the placeholder showing on screen.
+
 Line numbers in the built programs are not the source's: the enemy's routines
 are renumbered from 2, everything else is its source line plus 1000. An error
 reported at line 2286 is source line 1286.
@@ -37,8 +43,9 @@ python tools/build.py src/IRONCLAD.BAS build/
 python tools/asm.py src/z80/fold.asm build/FOLD.BIN
 python tools/asm.py -DSPRULES=1 src/z80/fold.asm build/FOLDSP.BIN
 
-# the menu and artwork
-cp SETUP.BAS *.SC5 build/
+# the menu, with the version stamped in from VERSION, plus the artwork
+python tools/stamp.py build/
+cp *.SC5 build/
 
 # tokenise in openMSX (it exits on its own)
 FILES="SETUP.BAS IRONCLAD.BAS SALVO.BAS SALVOP.BAS" \
