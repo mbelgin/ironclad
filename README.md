@@ -1,5 +1,8 @@
 # IRONCLAD - Naval combat for the MSX2
 
+*Beyond the unseen,*  
+*victory or death.*
+
 **[Download the game](https://github.com/mbelgin/ironclad/releases/latest)**
 &nbsp;&middot;&nbsp;
 **[the manual (PDF)](https://github.com/mbelgin/ironclad/raw/main/release/IRONCLAD_MANUAL.PDF)**
@@ -27,10 +30,11 @@ Boot the **IRONCLAD disk** (`IRONCLAD.DSK`) in any MSX2 emulator, or write
 it to a 720 KB floppy for a real machine. The game loads and takes you to the
 menu.
 
+Loading takes a while, and there is more of it between games. On an emulator,
+turn the speed or turbo control up to skip through it, then back down to play.
+
 You need an **MSX2 with 128 KB of video RAM and a disk drive**. Any MSX2
 capable emulator will do.
-
-Your menu choices are saved and restored next time you play.
 
 ## The menu
 
@@ -103,8 +107,9 @@ Carrier (CAR, 5), Battleship (BAT, 4), Cruiser (CRU, 3), Submarine (SUB, 3),
 Destroyer (DES, 2). **Extended, eleven ships** (SALVO PLUS): the standard five,
 then Destroyer (DES, 2) twice more and four single-square Boats (BOT, 1).
 **Light, five ships** (PURSUIT): Frigate (FRI, 4), Corvette (COR, 3),
-Cutter (CUT, 3), Launch (LAU, 2), Skiff (SKI, 2). **Big, five ships** (ANKA):
-Carrier (CAR, 5) twice, Battleship (BAT, 4) twice, Cruiser (CRU, 3).
+Cutter (CUT, 3), Launch (LAU, 2), Skiff (SKI, 2). **Big, six ships** (ANKA):
+Carrier (CAR, 5) twice, Battleship (BAT, 4) twice, Cruiser (CRU, 3),
+Submarine (SUB, 3).
 
 ### The salvo rulesets: SALVO, SALVO PLUS, BARRAGE
 

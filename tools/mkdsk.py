@@ -2,9 +2,8 @@
 
 usage: python tools/mkdsk.py release/IRONCLAD.DSK [dir-with-tokenised-BAS]
 
-Writing release/IRONCLAD.DSK also mirrors it to sb/IRONCLAD_TEST.DSK, which is
-the copy to mount in an emulator: the game saves CFG.DAT into whatever disk it
-runs from, and that must not dirty the tracked image.
+The game does not write to the disk it runs from, so the image this builds is
+the one to mount and play; it is not modified by playing.
 The image contains AUTOEXEC.BAS, SETUP.BAS, IRONCLAD.BAS, SALVO.BAS, IRONCLAD.SC5 and
 TILES.SC5 from the repository root.  If a directory is given, the .BAS files are taken
 from there instead (tools/emu/tokenize.tcl produces tokenised copies that load in seconds).
@@ -80,22 +79,15 @@ def build(out, basdir=None, files=None, autoexec=None):
         img[o:o + len(fat)] = fat
     o = (RES + NFAT * SPF) * BPS
     img[o:o + len(root)] = root
-    targets = [out]
-    if out.replace(chr(92), '/').endswith('release/IRONCLAD.DSK'):
-        # The TEST twin is the one that gets played: openMSX writes CFG.DAT back
-        # into the mounted image, so playing the tracked disk would show up as a
-        # git diff every time.  It mirrors the release disk and lives in sb/,
-        # which is scratch, so release/ holds only what ships.
-        root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        scratch = os.path.join(root, 'sb')
-        os.makedirs(scratch, exist_ok=True)
-        targets.append(os.path.join(scratch, 'IRONCLAD_TEST.DSK'))
-    for t in targets:
-        try:
-            open(t, 'wb').write(img)
-            print(t, len(img), 'bytes,', len(entries), 'files')
-        except OSError as e:
-            print(t, 'NOT updated (file in use?):', e)
+    # The game never writes to the disk it runs from: the menu hands it the
+    # chosen settings in RAM (SETUP.BAS 162-164 -> src/IRONCLAD.BAS 158).  The
+    # image you build is the image you play, and playing does not modify it.
+    try:
+        open(out, 'wb').write(img)
+        print(out, len(img), 'bytes,', len(entries), 'files')
+    except OSError as e:
+        # usually the image is mounted in an emulator right now
+        raise SystemExit(f'{out} NOT written ({e}). Close whatever has it open.')
 
 if __name__ == '__main__':
     build(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None)

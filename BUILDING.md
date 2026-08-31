@@ -58,8 +58,23 @@ python -c "import sys;sys.path.insert(0,'tools');import mkdsk;mkdsk.build(
          'TILES.SC5','DEFEAT.SC5','VICTORY.SC5','FOLD.BIN','FOLDSP.BIN'])"
 ```
 
-This also writes `sb/IRONCLAD_TEST.DSK`. Mount that one to play: the game saves
-`CFG.DAT` into whatever disk it runs from.
+Mount and play that image directly. The game never writes to the disk it runs
+from, so playing does not modify it.
+
+## The cover art
+
+The `.SC5` files ship ready to use and the build chain above does not rebuild
+them.
+
+`IRONCLAD.SC5` carries the loading panel's QR code as a 58x58 block of pixels at
+(36,152). `SETUP.BAS` copies that block onto the panel with a single `COPY`;
+plotting it in BASIC instead cost 24 seconds of the boot. Two things follow if
+you ever regenerate the cover art yourself:
+
+- the block has to be written back in, or the panel shows a plain white square
+  with no error anywhere;
+- it has to stay inside the menu box `SETUP.BAS` 3520 fills, or a QR code
+  appears on the title screen.
 
 ## If you add, remove or resize an array
 
