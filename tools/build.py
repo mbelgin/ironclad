@@ -16,7 +16,7 @@ import toksize
 # Salvo Plus (SALVOP.BAS - 8.3 name; SALVOPLUS is 9 chars, illegal on MSX) lives in SP_ONLY; every other build drops those lines.
 # Lines only the ordinary 5-ship salvo game needs go in SALVO_ONLY, so Salvo Plus can
 # supply its own 10-ship versions without altering SALVO.BAS at all.
-SP_ONLY = [(119, 119), (122, 122), (132, 132), (134, 134), (155, 155), (4013, 4013), (4156, 4174), (9028, 9029), (9031, 9031)]
+SP_ONLY = [(119, 119), (122, 122), (132, 132), (134, 134), (155, 155), (4013, 4015), (4156, 4174), (9028, 9029), (9031, 9031)]
 SALVO_ONLY = [(118, 118), (120, 120), (130, 130), (133, 133), (3821, 3830), (3885, 3891), (4005, 4009), (4012, 4012), (9020, 9020), (9025, 9025), (9030, 9030)]
 
 BD_ONLY = [(974, 974), (3943, 3943), (120, 120), (130, 130), (101, 101), (133, 139), (103, 103), (118, 118), (1146, 1151), (1795, 1795), (2222, 2222), (3798, 3893), (4000, 4699), (9060, 9069)]
