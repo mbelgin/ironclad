@@ -14,7 +14,7 @@
 > [github.com/mbelgin/ironclad/issues](https://github.com/mbelgin/ironclad/issues).
 > Bug reports and feature requests are both welcome.
 
-Ten by ten squares of open sea, an enemy fleet matching your own hidden
+Ten by ten cells of open sea, an enemy fleet matching your own hidden
 somewhere on it, and no way to look across. Every shot you fire is a discovery,
 and the distance between victory and defeat is what you make of them. Seven
 rulesets, from a gentle kids' ruleset to salvo duels of pure deduction, with
@@ -57,7 +57,7 @@ where it doesn't.
 Move it with the arrows, **R** **R**otates it, **SPACE** drops it, **U**
 **U**ndoes the last deployed ship, and **Z** auto-places the rest. In every
 ruleset except STEALTH, ships may not touch, not even diagonally, so each ship
-needs a one-square ring of clear water. The same restriction binds the enemy.
+needs a one-cell ring of clear water. The same restriction binds the enemy.
 
 When the last ship is down, a coin toss decides who fires first (in a match it
 alternates from then on), and the battle begins.
@@ -68,7 +68,7 @@ You fire on **ENEMY WATERS**: move the cursor, **SPACE** fires. The
 enemy answers on **YOUR FLEET**, where its shots appear on your grid and its
 results are reported on the message line. **TAB** flips between the two views
 at any time, though you can only fire from ENEMY WATERS. The first side to hit
-every square of every enemy ship wins.
+every cell of every enemy ship wins.
 
 What a shot tells you depends on the ruleset. In the single-shot rulesets each
 shot is answered at once with hit, miss or sunk; in the salvo rulesets you fire
@@ -79,12 +79,12 @@ The right-hand panels are the scoreboard, ENEMY above and YOURS below, one
 entry per ship. **AT:** shows the coordinate under the cursor, and in a match
 the score sits at the top (`GAME 2/3 1-0`).
 
-**Buoys are your notepad.** Press **X** on a square of ENEMY WATERS to mark it:
-an empty square cycles yellow buoy, gray buoy, clear, and a square you have
+**Buoys are your notepad.** Press **X** on a cell of ENEMY WATERS to mark it:
+an empty cell cycles yellow buoy, gray buoy, clear, and a cell you have
 already fired at cycles its number red and back. Marks never affect play, and
-you can still fire at a marked square. They earn their keep in the salvo
+you can still fire at a marked cell. They earn their keep in the salvo
 rulesets, where the board is the only place to keep your working. The enemy
-keeps a notepad of its own: the buoys on YOUR FLEET are squares it has
+keeps a notepad of its own: the buoys on YOUR FLEET are cells it has
 *deduced* must be empty.
 
 **?** puts the key list on screen at any point and any key dismisses it. **Q**
@@ -105,7 +105,7 @@ twice abandons the game and returns to the menu.
 Fleets, with the three-letter labels the panels use. **Standard, five ships**:
 Carrier (CAR, 5), Battleship (BAT, 4), Cruiser (CRU, 3), Submarine (SUB, 3),
 Destroyer (DES, 2). **Extended, eleven ships** (SALVO PLUS): the standard five,
-then Destroyer (DES, 2) twice more and four single-square Boats (BOT, 1).
+then Destroyer (DES, 2) twice more and four single-cell Boats (BOT, 1).
 **Light, five ships** (PURSUIT): Frigate (FRI, 4), Corvette (COR, 3),
 Cutter (CUT, 3), Launch (LAU, 2), Skiff (SKI, 2). **Big, six ships** (ANKA):
 Carrier (CAR, 5) twice, Battleship (BAT, 4) twice, Cruiser (CRU, 3),
@@ -114,19 +114,19 @@ Submarine (SUB, 3).
 ### The salvo rulesets: SALVO, SALVO PLUS, BARRAGE
 
 Both sides fire a complete salvo before any results are given, and the report
-names only **how many hits landed on each ship, never which squares**.
+names only **how many hits landed on each ship, never which cells**.
 Untangling that is the game.
 
 Every shot is stamped with the number of the salvo it belonged to (1 to 9, then
-A, B, C and on). Nothing else is ever drawn on the squares, so a sunk enemy ship
+A, B, C and on). Nothing else is ever drawn on the cells, so a sunk enemy ship
 is named but never shown:
 
-- a **white** number *(automatic)* means that salvo scored nothing: every square
+- a **white** number *(automatic)* means that salvo scored nothing: every cell
   it hit is open water;
 - a **yellow** number *(automatic)* means that salvo scored at least one hit,
-  somewhere among its squares. Which of them, you have to work out;
+  somewhere among its cells. Which of them, you have to work out;
 - a **red** number *(yours, optional)* is one you marked yourself with **X**.
-  Use it for a square you have *proved* holds a ship, so a hit you have pinned
+  Use it for a cell you have *proved* holds a ship, so a hit you have pinned
   down stops looking like an open question.
 
 Buoys carry the other half of the reasoning. Use of buoys is completely
@@ -134,8 +134,8 @@ optional, and the game attaches no meaning to either color: they are your
 notepad. One recommended use:
 
 - a **yellow buoy** for the ring around a ship you have found. No ship may
-  touch another in these three rulesets, so the moment a ship's squares are
-  known, every square surrounding it must be empty;
+  touch another in these three rulesets, so the moment a ship's cells are
+  known, every cell surrounding it must be empty;
 - a **gray buoy** for water you have ruled out: every ship still afloat is too
   long for the gap, so there is no point ever firing there.
 
@@ -144,12 +144,12 @@ unmarked is where the rest of the enemy fleet has to be.
 
 ![A salvo game on ENEMY WATERS](img/salvo.png)
 
-*The red numbers are the player's own marks, on squares proved to hold a ship,
+*The red numbers are the player's own marks, on cells proved to hold a ship,
 and the yellow buoys ring those hulls, which under SALVO rules must be clear
 water. What is left unmarked is what remains to search.*
 
 The ENEMY panel records, for each ship, the number of every salvo that hit it.
-Above, `SUB A ▪ ▪` says salvo A struck the Submarine once and two of its squares
+Above, `SUB A ▪ ▪` says salvo A struck the Submarine once and two of its cells
 are still whole, while `CAR 6 7 7 8 B` is a Carrier hit on five separate salvos
 and now sunk, which is why its name has turned red. A number appearing twice,
 like the two 7s there, is a single salvo putting two shells into the same hull.
@@ -174,10 +174,10 @@ twice. The buoys here are the enemy's working, not yours: water it has proved
 empty.*
 
 **SALVO PLUS** sends the same three shells against a larger fleet of eleven
-ships, four of them one square long. Hit a longer ship and you learn something:
-it has to carry on into one of the squares beside the hit. A one-square Boat
-sinks on the first hit and leaves nothing to reason from, so the last of them
-have to be hunted square by square. **BARRAGE** gives you one shell for every
+ships, four of them one cell long. Hit a longer ship and you learn something:
+it has to carry on into one of the cells beside the hit. A one-cell Boat
+sinks on the first hit, so there is nothing to carry on into, and the last of
+them have to be hunted cell by cell. **BARRAGE** gives you one shell for every
 ship you still have afloat: five ships fire five shots, one ship fires one, so
 your firepower shrinks as your fleet does, and so does the enemy's.
 
@@ -208,11 +208,52 @@ hit earns the young side another shot (the computer gets no such favor), and
 the enemy fires at random until it hits something, then works outward from the
 hit. Meant to be beaten, though it does not miss on purpose.
 
+## Strategy
+
+**SALVO.** Each player gets three shots a turn. Nobody can out-shoot anyone,
+so the game is won on what you can uncover by inference.
+
+You are told how many hits each ship took, but never which shot landed them.
+Where you place the three shots decides whether you can work out which cell
+was hit. Place them close together and "one hit" tells you nothing: it could
+be any of the three. Place them far enough apart that no single ship could
+cover two of them, and "one hit on the cruiser" tells you exactly which cell
+the cruiser is on.
+
+That is worth more than the hit itself. Ships may not touch, so once you know
+a cell holds a ship you can scratch off the cells around it and hunt in a
+smaller space next turn. Sink a ship blindly and you have sunk a ship. Sink
+one you have mapped and you also take a ring of empty water off the board.
+That is your winning edge.
+
+**SALVO PLUS.** The same three shots, but eleven ships instead of five, and
+four of them are a single cell. A single cell gives you less to reason from:
+it can be anywhere you have not fired. The game becomes a mix of deduction and
+search until those boats are sunk. Hunting costs turns, during which a less
+strategic opponent who got lucky early may catch up and beat you. Skill still
+wins more games than luck here. It just no longer wins all of them, so build
+your lead early.
+
+**BARRAGE.** Each player gets one shot for every ship still afloat. Five
+ships, five shots. Lose a ship and you lose a shot for the rest of the game.
+
+That changes what a shot is worth. In SALVO you use shots to gather
+information. Here, every ship you sink cuts your opponent's firepower for the
+rest of the game, so from then on you cover more of the board each turn than
+they do. Once you have wounded a ship, put your shots on it and finish it,
+without worrying too much about its exact coordinates. Imagine getting your
+opponent down to one shot a turn while you still have four: it stops mattering
+how little of the board you have worked out, because you fire four times as
+often as they do.
+
+**In short:** in SALVO you fire to learn. In BARRAGE you fire to kill. SALVO
+PLUS is SALVO with luck added.
+
 ## The opponent
 
 **The computer never cheats.** In every ruleset it plays the strongest game it
 knows, it sees no more of your fleet than you see of its own, and it is told
-exactly what that ruleset's rules allow and never a square more. Every deduction
+exactly what that ruleset's rules allow and never a cell more. Every deduction
 it makes is one you could have made from the same reports. What makes it
 dangerous is bookkeeping: in the salvo rulesets it keeps a list of every
 position each of your ships could still be in, crosses off the ones your reports
@@ -230,7 +271,7 @@ MSX2 allows.
 | **R** | | rotate ship | |
 | **U** | | pick up last ship | take back last shot of the salvo |
 | **Z** | | auto-place the rest | |
-| **X** | | | buoy on empty water: yellow → gray → off; on a fired square: number red → back |
+| **X** | | | buoy on empty water: yellow → gray → off; on a fired cell: number red → back |
 | **TAB** | | switch view | switch view |
 | **?** | rules of every ruleset | key list | key list |
 | **Q** | exit to BASIC (twice) | back to menu | terminate game (twice) |
@@ -266,7 +307,7 @@ Recommended bindings, tested on blueMSX only:
 | **Y** (left) | SPACE | fire, and drop a ship while deploying |
 | **A** (right) | U | undo: take back a shot or pick a ship back up |
 | **B** (bottom) | R | rotate the ship being placed |
-| **X** (top) | X | buoys, and the red marks on fired squares |
+| **X** (top) | X | buoys, and the red marks on fired cells |
 | **L1** | TAB | switch between the two boards |
 | **R1** | Z | auto-place the rest of the fleet |
 | **Select** | ? | the key list, and the rules table in the menu |
