@@ -174,12 +174,14 @@ twice. The buoys here are the enemy's working, not yours: water it has proved
 empty.*
 
 **SALVO PLUS** sends the same three shells against a larger fleet of eleven
-ships, four of them one cell long.  it tells you where to fire next: the rest
-of it lies in a cell beside the hit. A Boat sinks on that first hit, so it
-never points you anywhere. You still learn the water around it is empty, but
-the remaining Boats have to be hunted cell by cell. **BARRAGE** gives you one shell for every
-ship you still have afloat: five ships fire five shots, one ship fires one, so
-your firepower shrinks as your fleet does, and so does the enemy's.
+ships, four of them one cell long. Hit a ship longer than one cell and it
+tells you where to fire next: the rest of it lies in a cell beside the hit. A
+Boat sinks on that first hit, so it never points anywhere, and usually you
+cannot even tell which of your three cells it was in unless you can account
+for the other two. So the last Boats have to be hunted cell by cell.
+**BARRAGE** gives you one shell for every ship you still have afloat: five
+ships fire five shots, one ship fires one, so your firepower shrinks as your
+fleet does, and so does the enemy's.
 
 ![SALVO PLUS](img/salvoplus.png)
 
