@@ -36,26 +36,28 @@ reported at line 2286 is source line 1286.
 ## Build
 
 ```sh
-# the three BASIC programs
+# the four BASIC programs
 python tools/build.py src/IRONCLAD.BAS build/
 
-# the Z80 engine, two variants
+# the Z80 engine, three variants
 python tools/asm.py src/z80/fold.asm build/FOLD.BIN
 python tools/asm.py -DSPRULES=1 src/z80/fold.asm build/FOLDSP.BIN
+python tools/asm.py -DBARRULES=1 src/z80/fold.asm build/FOLDBAR.BIN
 
 # the menu, with the version stamped in from VERSION, plus the artwork
 python tools/stamp.py build/
 cp *.SC5 build/
 
 # tokenise in openMSX (it exits on its own)
-FILES="SETUP.BAS IRONCLAD.BAS SALVO.BAS SALVOP.BAS" \
+FILES="SETUP.BAS IRONCLAD.BAS SALVO.BAS SALVOP.BAS BARRAGE.BAS" \
   openmsx -machine Sony_HB-F1XD -diska build/ -script tools/emu/tokenize.tcl
 
 # the disk image
 python -c "import sys;sys.path.insert(0,'tools');import mkdsk;mkdsk.build(
   'release/IRONCLAD.DSK', basdir='build',
-  files=['SETUP.BAS','IRONCLAD.BAS','SALVO.BAS','SALVOP.BAS','IRONCLAD.SC5',
-         'TILES.SC5','DEFEAT.SC5','VICTORY.SC5','FOLD.BIN','FOLDSP.BIN'])"
+  files=['SETUP.BAS','IRONCLAD.BAS','SALVO.BAS','SALVOP.BAS','BARRAGE.BAS',
+         'IRONCLAD.SC5','TILES.SC5','DEFEAT.SC5','VICTORY.SC5',
+         'FOLD.BIN','FOLDSP.BIN','FOLDBAR.BIN'])"
 ```
 
 Mount and play that image directly. The game never writes to the disk it runs
@@ -75,6 +77,26 @@ you ever regenerate the cover art yourself:
   with no error anywhere;
 - it has to stay inside the menu box `SETUP.BAS` 3520 fills, or a QR code
   appears on the title screen.
+
+## Which program runs which ruleset
+
+`SETUP.BAS` reads a `BD` field per ruleset and dispatches on it. Each program
+loads its own engine; the three engines are one source assembled with different
+constants, at the same addresses, so only the filename differs.
+
+| program | engine | rulesets |
+|---|---|---|
+| `IRONCLAD.BAS` | none | CLASSIC, PURSUIT, STEALTH, ANKA |
+| `SALVO.BAS` | `FOLD.BIN` | SALVO |
+| `SALVOP.BAS` | `FOLDSP.BIN` | SALVO PLUS |
+| `BARRAGE.BAS` | `FOLDBAR.BIN` | BARRAGE |
+
+BARRAGE is its own program because its game is different: salvo size is the
+surviving ship count, so sinking a ship also takes a shot off the opponent every
+turn after. `tools/build.py` keeps the four apart with per-build line lists, so a
+change meant for one cannot reach the others. Check that by building before and
+after and comparing: the programs you did not mean to touch must come out
+byte-identical.
 
 ## If you add, remove or resize an array
 

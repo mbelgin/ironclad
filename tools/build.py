@@ -16,6 +16,17 @@ import toksize
 # Salvo Plus (SALVOP.BAS - 8.3 name; SALVOPLUS is 9 chars, illegal on MSX) lives in SP_ONLY; every other build drops those lines.
 # Lines only the ordinary 5-ship salvo game needs go in SALVO_ONLY, so Salvo Plus can
 # supply its own 10-ship versions without altering SALVO.BAS at all.
+# BARRAGE is its own game: salvo size is your surviving ship count, so sinking a
+# ship cuts the opponent's firepower and finishing one beats locating it.  It
+# gets its own program so its search can diverge without touching SALVO, which
+# shares every other line with it.  BAR_ONLY lines reach BARRAGE.BAS alone.
+# Its DIM sequence must stay identical to SALVO's: tools/aryoffs.py bakes
+# FOLD.BIN's array offsets from that build, so BARRAGE may add variables but
+# never add, remove or resize an array.
+BAR_ONLY = [(135, 135)]
+# BARRAGE alone drops the shared engine loader: it BLOADs FOLDBAR.BIN instead,
+# which is FOLD.BIN at the same addresses with a finisher weight of its own.
+BAR_DROP = [(133, 133)]
 SP_ONLY = [(119, 119), (122, 122), (132, 132), (134, 134), (155, 155), (4013, 4015), (4156, 4174), (9028, 9029), (9031, 9031)]
 SALVO_ONLY = [(118, 118), (120, 120), (130, 130), (133, 133), (3821, 3830), (3885, 3891), (4005, 4009), (4012, 4012), (9020, 9020), (9025, 9025), (9030, 9030)]
 
@@ -96,9 +107,10 @@ def build(src, drop, hotranges, merge=True, strip=True):
 if __name__ == '__main__':
     src = open(sys.argv[1], encoding='latin-1').read()
     outdir = sys.argv[2]
-    for name, drop, hot in (('IRONCLAD.BAS', BD_ONLY + SP_ONLY, HOT_STD),
-                            ('SALVO.BAS', STD_ONLY + SP_ONLY, HOT_BD),
-                            ('SALVOP.BAS', STD_ONLY + SALVO_ONLY, HOT_BD)):
+    for name, drop, hot in (('IRONCLAD.BAS', BD_ONLY + SP_ONLY + BAR_ONLY, HOT_STD),
+                            ('SALVO.BAS', STD_ONLY + SP_ONLY + BAR_ONLY, HOT_BD),
+                            ('SALVOP.BAS', STD_ONLY + SALVO_ONLY + BAR_ONLY, HOT_BD),
+                            ('BARRAGE.BAS', STD_ONLY + SP_ONLY + BAR_DROP, HOT_BD)):
         o = build(src, drop, hot)
         open(os.path.join(outdir, name), 'w', encoding='latin-1', newline='').write(o)
         print(name, "lines", o.count('\r\n'), "tok~", toksize.total(o))

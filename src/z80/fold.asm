@@ -115,6 +115,10 @@ vSOA            equ     PARM+80         ; up to 7 ship indices, sorted
 vZX             equ     PARM+88         ; up to 21 sampled cells (42 bytes)
 vRK             equ     PARM+130        ; in-game rim verdict, poked by BASIC
 vCCK            equ     PARM+131        ; word: CC(K) during the probe argmin
+vNEED           equ     PARM+135        ; byte: SZ-PH of the ship being weighted.
+                                        ; NOT 133: eCELLS is PARM+110 and 25 bytes
+                                        ; long, so it runs to PARM+134.  PARM+135
+                                        ; up to MOBUF at PARM+144 is the free gap.
 ; exact's scratch aliases the sampler's (vSOA/vZX): the two never run in the
 ; same turn, and each initialises everything it reads.
 eORD            equ     vSOA            ; sortso's output IS the DFS order
@@ -939,10 +943,39 @@ psship:
                 call    getel
                 cp      b
                 jp      z,psnext
+                IFDEF BARRULES
+                sub     b               ; A = SZ-PH, the hits still needed
+                ld      (vNEED),a
+                ENDIF
                 ld      a,(vK)
                 ld      hl,(pCC)
                 call    getel16
                 ld      (vCCK),de
+; BARRAGE values a kill for its own sake: NF is the surviving ship count, so
+; sinking a ship takes a shot off its owner for the rest of the game.  Every
+; square that could still complete a wounded ship gets 6000/(need*CC) on top
+; of whatever probesel already placed - harder the nearer that ship is to
+; death, thinner the more placements it still has.  A placement eliminated by
+; a miss stops attracting fire on its own, which is what "work the end that
+; survived" is under a ruleset that never says which shot hit.
+                IFDEF BARRULES
+                push    de
+                ld      hl,6000
+                ld      c,e
+                ld      b,d
+                call    div16           ; HL = 6000 / CC
+                ld      a,(vNEED)
+                ld      c,a
+                ld      b,0
+                call    div16           ; HL = that / need
+                ld      (vWT),hl
+                ld      a,1
+                ld      (vMODE),a
+                call    scan
+                xor     a
+                ld      (vMODE),a
+                pop     de
+                ENDIF
                 ld      a,d
                 or      a
                 jr      nz,psprobe
@@ -1182,3 +1215,15 @@ end:
 
                 include "sampler.inc"
 
+; The session counters sit at DDF0 and the measured Disk BASIC work area just
+; above them, so the image must end below DDF0.  BARRAGE is the tight one: it
+; carries the kill weighting on top of everything the classic engine has.
+; Assemble-time, because overrunning this corrupts the session counters and
+; shows up as bizarre behaviour many turns later rather than as a crash.
+; The menu hands the game its settings through a block that USED to sit at
+; DDE0-DDEB, i.e. BELOW this ceiling.  An engine that grew past DDCF overwrote
+; it and the game silently booted with default settings - no crash, just the
+; wrong ruleset.  The block now lives at DDF5-DE00, above the counters, so the
+; ceiling here is genuinely DDF0.  Anything new placed in this region must go
+; ABOVE the counters, never below them.
+                ASSERT $ <= 0DDEFh

@@ -11,7 +11,7 @@ from there instead (tools/emu/tokenize.tcl produces tokenised copies that load i
 import sys, os, struct, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FILES = ['SETUP.BAS', 'IRONCLAD.BAS', 'SALVO.BAS', 'IRONCLAD.SC5', 'TILES.SC5']
+FILES = ['SETUP.BAS', 'IRONCLAD.BAS', 'SALVO.BAS', 'BARRAGE.BAS', 'IRONCLAD.SC5', 'TILES.SC5']
 BPS, SPC, RES, NFAT, ROOTN, TOTAL, MEDIA, SPF, SPT, HEADS = 512, 2, 1, 2, 112, 1440, 0xF9, 3, 9, 2
 
 def boot_sector():
