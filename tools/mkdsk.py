@@ -1,17 +1,27 @@
 """Build a bootable 720 KB MSX disk image (FAT12) with the game files.
 
-usage: python tools/mkdsk.py release/IRONCLAD.DSK [dir-with-tokenised-BAS]
+usage: python tools/mkdsk.py release/IRONCLAD.DSK build/
 
 The game does not write to the disk it runs from, so the image this builds is
 the one to mount and play; it is not modified by playing.
-The image contains AUTOEXEC.BAS, SETUP.BAS, IRONCLAD.BAS, SALVO.BAS, IRONCLAD.SC5 and
-TILES.SC5 from the repository root.  If a directory is given, the .BAS files are taken
-from there instead (tools/emu/tokenize.tcl produces tokenised copies that load in seconds).
+
+FILES below is the release disk's contents, and it is the only copy of that
+list: build the disk with the command above rather than restating the list at
+the call site.  Give the directory holding the tokenised programs
+(tools/emu/tokenize.tcl produces them); every name in FILES must be present
+there or the build stops.  Measurement harnesses pass their own short `files`
+list and no directory, and are resolved against the repository root.
 """
 import sys, os, struct, time
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-FILES = ['SETUP.BAS', 'IRONCLAD.BAS', 'SALVO.BAS', 'BARRAGE.BAS', 'IRONCLAD.SC5', 'TILES.SC5']
+# The release disk, in the order the files are written to it: this is the disk's
+# directory and cluster layout, not an arbitrary list.  AUTOEXEC.BAS is
+# generated here and always goes first.  Adding a program or an engine means
+# adding it here, and nowhere else.
+FILES = ['SETUP.BAS', 'IRONCLAD.BAS', 'SALVO.BAS', 'SALVOP.BAS', 'BARRAGE.BAS',
+         'IRONCLAD.SC5', 'TILES.SC5', 'DEFEAT.SC5', 'VICTORY.SC5',
+         'FOLD.BIN', 'FOLDSP.BIN', 'FOLDBAR.BIN']
 BPS, SPC, RES, NFAT, ROOTN, TOTAL, MEDIA, SPF, SPT, HEADS = 512, 2, 1, 2, 112, 1440, 0xF9, 3, 9, 2
 
 def boot_sector():
@@ -27,6 +37,21 @@ def boot_sector():
                           0x32, 0xEB, 0xF3,       # LD (BDRCLR),A
                           0xC9])                  # RET
     return bytes(b)
+
+def source(f, basdir):
+    """Where one file comes from - with no second guess if it is not there.
+
+    A given basdir is the only place the file may come from.  It used to fall
+    back to the repository root when the file was missing there, which silently
+    packed whatever stale copy happened to be lying around instead of failing.
+    """
+    path = os.path.join(basdir, f) if basdir else os.path.join(ROOT, f)
+    if not os.path.exists(path):
+        where = basdir if basdir else 'the repository root'
+        raise SystemExit(f'mkdsk: {f} is not in {where} - build it first. '
+                         'Nothing was written.')
+    return path
+
 
 def build(out, basdir=None, files=None, autoexec=None):
     img = bytearray(TOTAL * BPS)
@@ -53,8 +78,7 @@ def build(out, basdir=None, files=None, autoexec=None):
                 % ((40 - len(title)) // 2, title)).encode('ascii')
     entries = [('AUTOEXEC.BAS', boot)]
     for f in (FILES if files is None else files):
-        src = os.path.join(basdir, f) if basdir and os.path.exists(os.path.join(basdir, f)) else os.path.join(ROOT, f)
-        entries.append((f, open(src, 'rb').read()))
+        entries.append((f, open(source(f, basdir), 'rb').read()))
     t = time.localtime()
     dostime = (t.tm_hour << 11) | (t.tm_min << 5) | (t.tm_sec // 2)
     dosdate = ((t.tm_year - 1980) << 9) | (t.tm_mon << 5) | t.tm_mday
