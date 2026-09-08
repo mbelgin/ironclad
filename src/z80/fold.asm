@@ -867,6 +867,29 @@ n1cell:
                 ENDIF
 
 ; marginals: add the ship's weight to each covered cell that is still scoreable
+;
+; THE WEIGHT BUDGET, and it is not enforced anywhere.  MG is a BASIC integer
+; array - signed, 32767 is the ceiling - and this routine ADDs vWT with no
+; saturation and no overflow check.  A negative cell means "off limits" here
+; and pickn stamps its own picks to -9, so a sum that passes 32767 does not
+; merely score badly: it wraps negative and the cell becomes untouchable.  The
+; failure mode is the enemy ignoring the one square it is surest of.
+;
+; Weights that can land on a single cell, and they accumulate across ships:
+;     coverage seed (mgseedmc)      small
+;     pickn finisher                 2000
+;     probesel probe                12000   (ambiguous ship, IFNDEF SPRULES)
+;     probesel harvest              25000   (located ship, IFNDEF SPRULES)
+;     BARRAGE graded kill      6000/(need*CC), un-located only (BARRULES)
+;
+; SALVO PLUS is safe by construction - probesel is not assembled into it.
+; SALVO and BARRAGE stay inside the ceiling only because the harvest and the
+; probe are mutually exclusive per ship, and because src 4324-4328 prunes other
+; ships' candidates off a located ship's cells before they can stack.  That is
+; incidental, not designed.  Before adding any new weight here, add up the
+; worst case; the durable fix is to saturate the ADD below at 32767, which
+; needs bytes FOLDBAR does not currently have (it ends at DDED against a DDF0
+; ceiling).  See the 62 dead bytes noted in the journal for where to get them.
 candmg:
                 ld      hl,(pMAP)       ; pMAP is MG
                 add     hl,de
@@ -961,13 +984,31 @@ psship:
                 ld      hl,(pCC)
                 call    getel16
                 ld      (vCCK),de
+                ld      a,d
+                or      a
+                jr      nz,psprobe
+                ld      a,e
+                cp      1
+                jr      nz,psprobe
+                ld      a,1
+                ld      (vMODE),a
+                ld      hl,25000
+                ld      (vWT),hl
+                call    scan
+                xor     a
+                ld      (vMODE),a
+                jp      psnext
 ; BARRAGE values a kill for its own sake: NF is the surviving ship count, so
 ; sinking a ship takes a shot off its owner for the rest of the game.  Every
-; square that could still complete a wounded ship gets 6000/(need*CC) on top
-; of whatever probesel already placed - harder the nearer that ship is to
-; death, thinner the more placements it still has.  A placement eliminated by
-; a miss stops attracting fire on its own, which is what "work the end that
-; survived" is under a ruleset that never says which shot hit.
+; square that could still complete a wounded ship gets 6000/(need*CC) - harder
+; the nearer that ship is to death, thinner the more placements it still has.
+;
+; Only where the ship is NOT yet located.  MG is a 16-bit signed BASIC array:
+; a located ship already draws the 25000 harvest above, and stacking 6000 on
+; top of that plus the seed overflows 32767 and wraps NEGATIVE, which makes the
+; one cell the enemy is surest of the least attractive on the board.  That is
+; not a tuning question, it is the sign bit.
+psprobe:
                 IFDEF BARRULES
                 push    de
                 ld      hl,6000
@@ -986,21 +1027,6 @@ psship:
                 ld      (vMODE),a
                 pop     de
                 ENDIF
-                ld      a,d
-                or      a
-                jr      nz,psprobe
-                ld      a,e
-                cp      1
-                jr      nz,psprobe
-                ld      a,1
-                ld      (vMODE),a
-                ld      hl,25000
-                ld      (vWT),hl
-                call    scan
-                xor     a
-                ld      (vMODE),a
-                jp      psnext
-psprobe:
                 call    clrmo
                 ld      a,2
                 ld      (vMODE),a
