@@ -2,11 +2,18 @@
 
 usage: python build.py src/IRONCLAD.BAS <outdir>
 
-Writes <outdir>/IRONCLAD.BAS (CLASSIC/PURSUIT/BROADSIDE/STEALTH rules) and
-<outdir>/SALVO.BAS (SALVO/BARRAGE rules).  The MSX has ~23 KB for a BASIC program,
-so each build drops the code the other mode does not need, moves the enemy AI to the
-lowest line numbers (MSX-BASIC finds jump targets by scanning from the program start),
-merges lines that are not jump targets, and strips optional spaces.
+Writes four programs into <outdir>, one per rule family:
+
+    IRONCLAD.BAS   CLASSIC, PURSUIT, STEALTH, ANKA
+    SALVO.BAS      SALVO
+    SALVOP.BAS     SALVO PLUS
+    BARRAGE.BAS    BARRAGE
+
+The MSX has ~23 KB for a BASIC program and the whole game does not fit in one, so
+each build drops the lines only the other families need, moves the enemy's
+routines to the lowest line numbers (MSX-BASIC finds jump targets by scanning from
+the start of the program), merges lines that are not jump targets, and strips
+optional spaces.
 """
 import re, sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
