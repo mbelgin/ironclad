@@ -38,12 +38,22 @@ SMEMB           equ     0DDF2h          ; learned-rim flag, poked by BASIC
 
 ; Two hard walls bound this image.  Disk BASIC's own work area is machine
 ; dependent: MEASURED at DE78 on the Sony HB-F1XD and DE6F on the blueMSX
-; MSX2+ profile (the two machines this game actually runs on).  The image and
-; the session counters stay below DDF0 - 127 bytes under the worst measured
-; wall - and release/PROBE.DSK reports any new machine's wall before trusting
-; it.  The 64 bytes just above the CLEAR address hold the file control block,
-; so the image must START above those.  CLEAR is at CF38, the image runs
-; D588 up, and every byte of it is a byte the BASIC pool does not get.
+; MSX2+ profile (the two machines this game actually runs on).  Measure the wall
+; on any new machine before trusting it.
+;
+; Below that wall the region is already spoken for, upward from DDF0: the
+; session counters at DDF0-DDF4, then the twelve settings bytes SETUP.BAS pokes
+; in at DDF5-DE00.  So this image's ceiling is DDF0 - 127 bytes under the worst
+; measured wall - and the ASSERT at the foot of this file holds it there.
+; Anything else parked in this region goes ABOVE the settings; below the
+; counters it silently lowers that ceiling and the image grows over whatever
+; sits there, with no error at all.
+;
+; The 64 bytes just above the CLEAR address hold the file control block, so the
+; image must START above those.  CLEAR is at CF38 and the image is top-aligned
+; by `org FABUF+FASIZE`, so where it starts depends on the candidate array:
+; D420 with the classic 760-byte FA, D588 with Salvo Plus's 1120.  Every byte
+; of it is a byte the BASIC pool does not get.
 PARM            equ     0CF78h          ; CLEAR address + 64
 ; MO lives here as BYTES: it only ever holds the current turn stamp, which the
 ; wrap-safe bump below keeps inside one byte, so the 12x12 plane costs 144
