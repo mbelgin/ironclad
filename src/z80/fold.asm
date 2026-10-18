@@ -65,7 +65,7 @@ MOBUF           equ     PARM+144        ; 12x12 stamp plane, byte per cell
 MCBUF           equ     MOBUF+144       ; 12x12 coverage plane, byte per cell
 ; FA lives here as BYTES in reserved RAM, not as a BASIC integer array: the
 ; flags are only ever 0 or 1, BASIC touched them in just two places (init and
-; the lone-candidate scan, now USR7 and a PEEK loop), and halving their width
+; the lone-candidate scan, now USR4 and a PEEK loop), and halving their width
 ; while moving them out of the pool hands roughly a kilobyte back to BASIC.
 FABUF           equ     MCBUF+144       ; 1120 candidate flags (SP-sized)
 pBASE           equ     PARM+0
@@ -150,17 +150,21 @@ FASIZE          equ     1120
 FASIZE          equ     760
                 ENDIF
                 org     FABUF+FASIZE
+; The slot index is NOT the USR number past slot 3.  The XRX BIOS accepts
+; USR0-USR6 only, so BASIC binds fainit and probesel as USR4 and USR6 by
+; their addresses, and marg and samp1 keep their slots unbound - moving any
+; slot would shift the addresses the BASIC loaders (133-135) poke.
 start:
-                jp      fold
-                jp      kill1
-                jp      explore
-                jp      pickn
-                jp      marg
-                jp      sample
-                jp      samp1
-                jp      fainit
+                jp      fold            ; USR0
+                jp      kill1           ; USR1
+                jp      explore         ; USR2
+                jp      pickn           ; USR3
+                jp      marg            ; unbound: reached by jp from sample
+                jp      sample          ; USR5
+                jp      samp1           ; unbound
+                jp      fainit          ; USR4
                 IFNDEF SPRULES
-                jp      probesel
+                jp      probesel        ; USR6
                 ENDIF
 
 ; ---------------------------------------------------------------- pointers
@@ -678,7 +682,7 @@ extnext:
                 jp      c,extshot
                 ret
 
-; ------------------------------------------------- USR4: fallback marginals
+; ------------------------------------------ marg: fallback marginals (no USR)
 ; Replaces BASIC 4040-4046.  When joint sampling produced nothing, every
 ; surviving candidate contributes weight 2880/CC(K) to the cells it covers,
 ; so the shot choice still follows the posterior instead of guessing.
@@ -930,7 +934,7 @@ cdone:
                 ld      (vFAP),hl
                 ret
 
-; ------------------------------------------------- USR7: reset the candidates
+; ------------------------------------------------- USR4: reset the candidates
 ; Game-start state in one call: every candidate alive, the stamp plane
 ; virgin and the stamp counter at zero (0 never matches a bumped stamp).
 fainit:
@@ -952,7 +956,7 @@ fainit:
                 ret
 
                 IFNDEF SPRULES
-; --------------------------------------------- USR8: probe + explore salvo
+; --------------------------------------------- USR6: probe + explore salvo
 ; The owner's kill discipline, twin-verified at z=+8.0/+7.8/+3.9 over
 ; 24,000 paired boards: located wounded ships are harvested (weight 25000),
 ; each still-ambiguous wounded ship gets ONE probe at the cell splitting

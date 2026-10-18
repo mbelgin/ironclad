@@ -32,9 +32,10 @@ smpend:
 
 ; One sample only, leaving vZX/vQNC/vGG for the legality harness to inspect.
 samp1:
-; No loader binds USR6, so this body is dead in every build; BARRAGE stubs it
-; to buy bytes for its kill weighting.  The jump-table slot must stay either
-; way - dropping it would shift USR7 and USR8 off the addresses BASIC pokes.
+; No loader binds this slot, so this body is dead in every build; BARRAGE stubs
+; it to buy bytes for its kill weighting.  The jump-table slot must stay either
+; way - dropping it would shift fainit and probesel (bound as USR4 and USR6)
+; off the addresses BASIC pokes.
                 IFDEF BARRULES
                 ret
                 ELSE
